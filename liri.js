@@ -26,19 +26,38 @@ switch (action) {
     case "do-what-it-says":
         doIt(inputs);
         break;
-    }
+}
 
+function movie(inputs) {
+    var queryUrl =
+        "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
+
+    request(queryUrl, function (error, response, body) {
+        var results = JSON.parse(body);
+
+        if (!error && response.statusCode === 200) {
+            console.log("Title: " + results.Title);
+            console.log("Release Year: " + results.Year);
+            console.log("IMDB Rating: " + results.imdbRating);
+            console.log("Rotten Tomatoes Rating: " + results.Ratings[1].Value);
+            console.log("Country: " + results.Country);
+            console.log("Language: " + results.Language);
+            console.log("Plot: " + results.Plot);
+            console.log("Actors: " + results.Actors);
+        }
+    });
+}
 
 var spotify = new Spotify({
     id: <your spotify client id>,
   secret: <your spotify client secret>
             });
-            
+
             spotify
               .request('https://api.spotify.com/v1/tracks/7yCPwWs66K8Ba5lFuU2bcx')
   .then(function(data) {
                 console.log(data);
-          })
+      })
   .catch(function(err) {
                 console.error('Error occurred: ' + err); 
   });
