@@ -14,20 +14,16 @@ switch (action) {
     case "spotify-this-song":
         spotify(inputs);
         break;
-
-    case "move-this":
+    case "movie-this":
         movie(inputs);
         break;
-
     case "concert-this":
         concert(inputs);
         break;
-
     case "do-what-it-says":
         doIt(inputs);
         break;
 }
-
 function movie(inputs) {
     var queryUrl =
         "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
@@ -47,7 +43,6 @@ function movie(inputs) {
         }
     });
 }
-
 function concert(inputs) {
     var queryUrl = "http://rest.bandsintown.com/artists/" + inputs + "/events?app_id=codingbootcamp";
 
@@ -56,20 +51,25 @@ function concert(inputs) {
             alert("Try a different input command!")
         }
 
-        var
-    })
+        var result = JSON.parse(body)[0];
+        if (!error){
+            console.log("City: " + result.venue.city + "\nVenue Name: " + result.venue.name + "\nDate of Event: " + moment(result.datetime).format("MM/DD/YYY") + 
+            "\nVenue Name: " + result.venue.name);
+        }
+    });
 }
-
-var spotify = new Spotify({
-    id: <your spotify client id>,
-  secret: <your spotify client secret>
-            });
-
-            spotify
-              .request('https://api.spotify.com/v1/tracks/7yCPwWs66K8Ba5lFuU2bcx')
-  .then(function(data) {
-                console.log(data);
-      })
-  .catch(function(err) {
-                console.error('Error occurred: ' + err); 
-  });
+function doIt(inputs){
+    fs.readFile("random.txt", "utf-8", function(err,bur){
+        console.log(buf.toString());
+    });
+}
+function spotify(inputs){
+    var spotify = new Spotify({
+        id: process.env.SPOTIFY_ID,
+        secret: process.env.SPOTIFY_SECRET
+    });
+    if(!inputs){
+        console.log("Oops, that didn't work! Try again!");
+        inputs = "Hit Me Baby One More Time";
+    }
+}
