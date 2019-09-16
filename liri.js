@@ -55,6 +55,8 @@ function concert(inputs) {
         if(!inputs){
             alert("Try a different input command!")
         }
+
+        var
     })
 }
 
