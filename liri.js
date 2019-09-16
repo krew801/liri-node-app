@@ -42,7 +42,7 @@ function concert(inputs) {
 
     request(queryUrl, function(error, response, body){
         if(!inputs){
-            alert("Try a different input command!")
+            console.log("Try a different input command!");
         }
 
         let result = JSON.parse(body)[0];
@@ -66,4 +66,18 @@ function spotify(inputs){
         console.log("Oops, that didn't work! Try again!");
         inputs = "Hit Me Baby One More Time";
     }
+    spotify.search({
+        type: "track",
+        query: inputs,
+    },
+    function(err,data){
+        if(err){
+            console.log("OH Snap!! An unwanted guest has stopped by. That means: " + err);
+            return;
+        }
+       let songDetails = data.tracks.items;
+       console.log("Here is the Artist: " + songDetails[0].artists[0].name + "\nWhat is the name of the song you say? Well it's: " + songDetails[0].name + 
+       "\nCheck out this sweet sweet link: " + songDetails[0].preview_url + 
+       "\nIt's part of this album: " + songDetails[0].album.name); 
+    });
 }
