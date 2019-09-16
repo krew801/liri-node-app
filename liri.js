@@ -1,30 +1,63 @@
+//LIRI will search Spotify for songs, Bands in Town for concerts, and OMDB for movies.
+
+//   * [DotEnv](https://www.npmjs.com/package/dotenv)
 require("dotenv").config();
 let keys = require("./keys.js");
 let request = require("request");
+//   * [Node-Spotify-API](https://www.npmjs.com/package/node-spotify-api)
 let Spotify = require('node-spotify-api');
+//* You should then be able to access your keys information like so
 let spotify = new Spotify(keys.spotify);
 let fs = require("fs");
+//   * [Moment](https://www.npmjs.com/package/moment)
 let moment = require("moment");
 let axios = require("axios");
 let input = process.argv;
 let action = input[2];
 let inputs = input[3];
 
+//Commands used for different searches
+// * `concert-this`
+
+// * `spotify-this-song`
+
+// * `movie-this`
+
+// * `do-what-it-says`
+
 switch (action) {
-    case "spotify-this-song":
-        spotifyThis(inputs);
-        break;
-    case "movie-this":
-        movie(inputs);
-        break;
-    case "concert-this":
-        concert(inputs);
-        break;
     case "do-what-it-says":
         letsReadThatFile(inputs);
         break;
+
+    //`node liri.js movie-this '<movie name here>'`
+    case "movie-this":
+        movie(inputs);
+        break;
+
+    //`node liri.js spotify-this-song '<song name here>'
+    // * Artist(s)
+
+    // * The song's name
+
+    // * A preview link of the song from Spotify
+
+    // * The album that the song is from
+    case "spotify-this-song":
+        spotifySearch(inputs);
+        break;
+
+    //1. `node liri.js concert-this <artist/band name here>`
+    // * Name of the venue
+
+    // * Venue location
+
+    // * Date of the Event (use moment to format this as "MM/DD/YYYY")
+     case "concert-this":
+        concertChecker(inputs);
+        break;
 }
-function letsReadThatFile(inputs){
+function letsReadThatFile(inputs) {
     fs.readFile("random.txt", "utf-8");
 
 }
@@ -36,36 +69,36 @@ function movie(inputs) {
         let results = JSON.parse(body);
 
         if (!error) {
-            console.log("Title: " + results.Title + "\nRelease Year: " + results.Year + "\nIMDB Rating: " + results.imdbRating + "\nRotten Tomatoes Rating: " + results.Ratings[1].Value + "\nCountry: " + results.Country + 
-            "\nLanguage: " + results.Language + "\nPlot: " + results.Plot + "\nActors: " + results.Actors);
+            console.log("Title: " + results.Title + "\nRelease Year: " + results.Year + "\nIMDB Rating: " + results.imdbRating + "\nRotten Tomatoes Rating: " + results.Ratings[1].Value + "\nCountry: " + results.Country +
+                "\nLanguage: " + results.Language + "\nPlot: " + results.Plot + "\nActors: " + results.Actors);
         }
     });
 }
-function concert(input) {
+function concertChecker(input) {
     let queryUrl = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp";
 
-    request(queryUrl, function(error, response, body){
-        if(!input){
+    request(queryUrl, function (error, response, body) {
+        if (!input) {
             console.log("Try a different input command!");
             inputs = "The Wiggles";
         }
 
         let result = JSON.parse(body)[0];
-        if (!error){
+        if (!error) {
             console.log("City: " + result.venue.city + "\n------------------------------------" + "\nVenue Name: " + result.venue.name + "\n------------------------------------" +
-             "\nDate of Event: " + moment(result.datetime).format("MM/DD/YYYY")+ "\n------------------------------------");
+                "\nDate of Event: " + moment(result.datetime).format("MM/DD/YYYY") + "\n------------------------------------");
         }
-        else{
+        else {
             return false;
         }
     });
 }
-function spotifyThis(inputs){
+function spotifySearch(inputs) {
     let spotify = new Spotify({
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
     });
-    if(!inputs){
+    if (!inputs) {
         console.log("Oops, that didn't work! Try again!");
         inputs = "Hit Me Baby One More Time";
     }
@@ -73,14 +106,14 @@ function spotifyThis(inputs){
         type: "track",
         query: inputs,
     },
-    function(err,data){
-        if(err){
-            console.log("OH Snap!! An unwanted guest has stopped by. That means: " + err);
-            return;
-        }
-       let songDetails = data.tracks.items;
-       console.log("Here is the Artist: " + songDetails[0].artists[0].name + "\n----------------------------" + "\nWhat is the name of the song you say? Well it's: " + songDetails[0].name + 
-       "\n----------------------------" + "\nCheck out this sweet sweet link: " + songDetails[0].preview_url + 
-       "\n----------------------------" + "\nIt's part of this album: " + songDetails[0].album.name); 
-    });
+        function (err, data) {
+            if (err) {
+                console.log("OH Snap!! An unwanted guest has stopped by. That means: " + err);
+                return;
+            }
+            let songDetails = data.tracks.items;
+            console.log("Here is the Artist: " + songDetails[0].artists[0].name + "\n----------------------------" + "\nWhat is the name of the song you say? Well it's: " + songDetails[0].name +
+                "\n----------------------------" + "\nCheck out this sweet sweet link: " + songDetails[0].preview_url +
+                "\n----------------------------" + "\nIt's part of this album: " + songDetails[0].album.name);
+        });
 }
