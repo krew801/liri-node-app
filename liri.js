@@ -48,6 +48,16 @@ function movie(inputs) {
     });
 }
 
+function concert(inputs) {
+    var queryUrl = "http://rest.bandsintown.com/artists/" + inputs + "/events?app_id=codingbootcamp";
+
+    request(queryUrl, function(error, response, body){
+        if(!inputs){
+            alert("Try a different input command!")
+        }
+    })
+}
+
 var spotify = new Spotify({
     id: <your spotify client id>,
   secret: <your spotify client secret>
