@@ -1,0 +1,6 @@
+User Command: node liri.js spotify-this-songFreebird
+
+User Command: node liri.js movie-this undefined
+
+User Command: node liri.js movie-this Ghost
+

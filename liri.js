@@ -9,6 +9,7 @@ let Spotify = require('node-spotify-api');
 //* You should then be able to access your keys information like so
 let spotify = new Spotify(keys.spotify);
 let fs = require("fs");
+
 //   * [Moment](https://www.npmjs.com/package/moment)
 let moment = require("moment");
 let axios = require("axios");
@@ -58,43 +59,59 @@ switch (action) {
         concertChecker(inputs);
         break;
 }
-function letsReadThatFile(inputs) {
-    fs.readFile("random.txt", "utf-8");
+// function letsReadThatFile(inputs) {
+//     fs.readFile("random.txt", "utf-8");
 
-}
+// }
 function movie(inputs) {
-    let queryUrl =
-        "https://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
+    fs.appendFile('./log.txt', 'User Command: node liri.js movie-this ' + inputs + '\n\n', (err) => {
+		if (err) throw err;
+	});
+    let queryUrl = "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
 
     request(queryUrl, function (error, response, body) {
-        let results = JSON.parse(body);
-
+        const results = JSON.parse(body);
+        //This is checking to see if there is or is not an error.
         if (!error) {
-            console.log("Title: " + results.Title + "\nRelease Year: " + results.Year + "\nIMDB Rating: " + results.imdbRating + "\nRotten Tomatoes Rating: " + results.Ratings[1].Value + "\nCountry: " + results.Country +
-                "\nLanguage: " + results.Language + "\nPlot: " + results.Plot + "\nActors: " + results.Actors);
+            console.log("Title: " + results.Title + "\n------------------------------------" +
+                "\nYear: " + results.Year + "\n------------------------------------" +
+                "\nIMDB Rating: " + results.imdbRating + "\n------------------------------------" +
+                "\nRotten Tomatoes Rating: " + results.Ratings[1].Value + "\n------------------------------------" +
+                "\nCountry: " + results.Country +
+                "\nLanguage: " + results.Language + "\n------------------------------------" +
+                "\nPlot: " + results.Plot + "\n------------------------------------" +
+                "\nActors: " + results.Actors);
+        } else if (!inputs || TypeError) {
+            inputs("Mr Nobody");
+            console.log("Well that didn't work! Let's try again.");
         }
     });
 }
-function concertChecker(input) {
-    let queryUrl = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp";
+function concertChecker(inputs) {
+    fs.appendFile('./log.txt', 'User Command: node liri.js concert-this ' + inputs + '\n\n', (err) => {
+		if (err) throw err;
+	});
+    let queryUrl = "https://rest.bandsintown.com/artists/" + inputs + "/events?app_id=codingbootcamp";
 
-    request(queryUrl, function (error, response, body) {
+    request(queryUrl, function (error, responses, body) {
+        let result = JSON.parse(body)[0];
+        if (!error || !responses.StatusCode) {
+            console.log("City: " + result.City + "\n------------------------------------"
+                + "\nVenue Name: " + result.Venue + "\n------------------------------------"
+                + "\nDate of Event: " + moment(result.DateTime).format("MM/DD/YYYY")
+                + "\n------------------------------------");
+        }
         if (!inputs) {
             console.log("Try a different input command!");
             inputs = "The Wiggles";
         }
-
-        let result = JSON.parse(body)[0];
-        if (!error) {
-            console.log("City: " + result.venue.city + "\n------------------------------------" + "\nVenue Name: " + result.venue.name + "\n------------------------------------" +
-                "\nDate of Event: " + moment(result.datetime).format("MM/DD/YYYY") + "\n------------------------------------");
-        }
-        else {
-            return false;
-        }
+  
     });
 }
 function spotifySearch(inputs) {
+    fs.appendFile('./log.txt', 'User Command: node liri.js spotify-this-song' + inputs + '\n\n', (err) => {
+        if(err) throw err;
+    });
     let spotify = new Spotify({
         id: process.env.SPOTIFY_ID,
         secret: process.env.SPOTIFY_SECRET
