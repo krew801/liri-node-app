@@ -12,9 +12,9 @@ let fs = require("fs");
 //   * [Moment](https://www.npmjs.com/package/moment)
 let moment = require("moment");
 let axios = require("axios");
-let input = process.argv;
-let action = input[2];
-let inputs = input[3];
+let userInput = process.argv;
+let action = userInput[2];
+let inputs = userInput[3];
 
 //Commands used for different searches
 // * `concert-this`
@@ -26,6 +26,7 @@ let inputs = input[3];
 // * `do-what-it-says`
 
 switch (action) {
+    //Set's up a function to read the Random.txt file
     case "do-what-it-says":
         letsReadThatFile(inputs);
         break;
@@ -53,7 +54,7 @@ switch (action) {
     // * Venue location
 
     // * Date of the Event (use moment to format this as "MM/DD/YYYY")
-     case "concert-this":
+    case "concert-this":
         concertChecker(inputs);
         break;
 }
@@ -63,7 +64,7 @@ function letsReadThatFile(inputs) {
 }
 function movie(inputs) {
     let queryUrl =
-        "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
+        "https://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
 
     request(queryUrl, function (error, response, body) {
         let results = JSON.parse(body);
@@ -78,7 +79,7 @@ function concertChecker(input) {
     let queryUrl = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp";
 
     request(queryUrl, function (error, response, body) {
-        if (!input) {
+        if (!inputs) {
             console.log("Try a different input command!");
             inputs = "The Wiggles";
         }
