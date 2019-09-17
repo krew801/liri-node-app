@@ -15,45 +15,34 @@ let moment = require("moment");
 let axios = require("axios");
 let userInput = process.argv;
 let action = userInput[2];
+let songInputs = userInput[3];
 let inputs = process.argv.slice(3);
 
 //Commands used for different searches
 // * `concert-this`
-
 // * `spotify-this-song`
-
 // * `movie-this`
-
 // * `do-what-it-says`
-
 switch (action) {
     //Set's up a function to read the Random.txt file
     case "do-what-it-says":
         letsReadThatFile(inputs);
         break;
-
     //`node liri.js movie-this '<movie name here>'`
     case "movie-this":
         movie(inputs);
         break;
-
     //`node liri.js spotify-this-song '<song name here>'
     // * Artist(s)
-
     // * The song's name
-
     // * A preview link of the song from Spotify
-
     // * The album that the song is from
     case "spotify-this-song":
         spotifySearch(inputs);
         break;
-
     //1. `node liri.js concert-this <artist/band name here>`
     // * Name of the venue
-
     // * Venue location
-
     // * Date of the Event (use moment to format this as "MM/DD/YYYY")
     case "concert-this":
         concertChecker(inputs);
@@ -61,12 +50,12 @@ switch (action) {
 }
 // function letsReadThatFile(inputs) {
 //     fs.readFile("random.txt", "utf-8");
-
 // }
 function movie(inputs) {
+    //This posts the commands entered by the user into the log.txt file
     fs.appendFile('./log.txt', 'User Command: node liri.js movie-this ' + inputs + '\n\n', (err) => {
 		if (err) throw err;
-	});
+	});//Takes the input entered by the user and pushes it into the quesryURL
     let queryUrl = "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
 
     request(queryUrl, function (error, response, body) {
@@ -87,7 +76,7 @@ function movie(inputs) {
         }
     });
 }
-function concertChecker(inputs) {
+function concertChecker(songInputs) {
     fs.appendFile('./log.txt', 'User Command: node liri.js concert-this ' + inputs + '\n\n', (err) => {
 		if (err) throw err;
 	});

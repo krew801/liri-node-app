@@ -14,3 +14,13 @@ User Command: node liri.js movie-this The
 
 User Command: node liri.js movie-this The,Matrix
 
+User Command: node liri.js movie-this The,Shining
+
+User Command: node liri.js concert-this Post,malone
+
+User Command: node liri.js concert-this Post,malone
+
+User Command: node liri.js concert-this Post,malone
+
+User Command: node liri.js spotify-this-songSweet,Home,Alabama
+
