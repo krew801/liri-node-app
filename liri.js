@@ -15,7 +15,7 @@ let moment = require("moment");
 let axios = require("axios");
 let userInput = process.argv;
 let action = userInput[2];
-let inputs = userInput[3];
+let inputs = process.argv.slice(3);
 
 //Commands used for different searches
 // * `concert-this`
@@ -95,7 +95,7 @@ function concertChecker(inputs) {
 
     request(queryUrl, function (error, responses, body) {
         let result = JSON.parse(body)[0];
-        if (!error || !responses.StatusCode) {
+        if (!error) {
             console.log("City: " + result.City + "\n------------------------------------"
                 + "\nVenue Name: " + result.Venue + "\n------------------------------------"
                 + "\nDate of Event: " + moment(result.DateTime).format("MM/DD/YYYY")

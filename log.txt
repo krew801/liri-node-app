@@ -4,3 +4,13 @@ User Command: node liri.js movie-this undefined
 
 User Command: node liri.js movie-this Ghost
 
+User Command: node liri.js concert-this Post
+
+User Command: node liri.js concert-this Post
+
+User Command: node liri.js concert-this Post
+
+User Command: node liri.js movie-this The
+
+User Command: node liri.js movie-this The,Matrix
+
